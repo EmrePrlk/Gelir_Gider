@@ -1,0 +1,103 @@
+pipeline {
+    agent any
+
+    environment {
+        // DigitalOcean Access Token'ı Jenkins'in credentials'larından çekiyoruz
+
+        USER_EMAIL = 'toptascagri@gmail.com'
+   
+
+        // GitHub Credentials'larını Jenkins'ten çekiyoruz
+        GIT_CREDENTIALS_ID = 'cagri_github_token'
+        AWS_ACCESS_KEY_ID = credentials('aws-credentials-cagri47')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-credentials-cagri47')
+        // NODE_ENV = credentials('purchase_dev_NODE_ENV')
+
+
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                // GitHub repo'sunu credentials ile klonluyoruz
+                git credentialsId: "${GIT_CREDENTIALS_ID}", branch: 'main', url: 'https://github.com/juniusapp/junius-app-backend.git'
+            }
+        }
+        stage('ECR Login') {
+            steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-credentials-cagri47'
+                ]]) {
+                    script {
+                        // AWS CLI Login
+                        sh '''
+                        export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+                        export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+                        export AWS_DEFAULT_REGION=eu-central-1
+                        aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 471112771661.dkr.ecr.eu-central-1.amazonaws.com
+                        '''
+                    }
+                }
+            }
+        }
+        stage('Build and Push Docker Image') {
+            steps {
+                script {
+                    sh '''
+                    # Docker Build
+                    export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+                    export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+                    export AWS_DEFAULT_REGION=eu-central-1
+                    aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 471112771661.dkr.ecr.eu-central-1.amazonaws.com
+                    docker build -t 471112771661.dkr.ecr.eu-central-1.amazonaws.com/juniusappback:latest .
+
+                    # Docker Push
+                    docker push 471112771661.dkr.ecr.eu-central-1.amazonaws.com/juniusappback:latest
+                    '''
+                }
+            }
+        }
+        
+        stage('Deploy to EC2') {
+            steps {
+                script {
+                    def remote = [:]
+                    remote.host = "3.65.160.83"
+                    remote.user = 'ubuntu'
+                    remote.identityFile = '/var/lib/jenkins/.ssh/juniusapp.pem'
+                    remote.allowAnyHosts = true
+
+                    // Docker komutlarını hazırlıyoruz
+                    def dockerCommands = '''
+                        cd junius-app-backend-main
+                        docker pull 471112771661.dkr.ecr.eu-central-1.amazonaws.com/juniusappback:latest
+                        docker compose up -d --no-deps backend
+                    '''
+                    
+                    // SSH komutlarını çalıştır
+                    sh """
+                        ssh -i ${remote.identityFile} -o StrictHostKeyChecking=no ${remote.user}@${remote.host} "${dockerCommands}"
+                    """
+                }
+            }
+        }
+    }
+    
+post {
+    always {
+        script {
+            // Cleanup: Docker'da build edilmiş imajları siliyoruz
+            sh """
+            docker rmi 471112771661.dkr.ecr.eu-central-1.amazonaws.com/juniusappback:latest || true
+            """
+        }
+    
+}
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. cagri-juni-main'
+        }
+    }
+}

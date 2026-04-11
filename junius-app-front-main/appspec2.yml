@@ -1,0 +1,15 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/junius-app-front
+hooks:
+  # BeforeInstall:
+  #   - location: /home/ubuntu/app/clean.sh
+  #     timeout: 300
+  #     runas: ubuntu
+  
+  AfterInstall:
+    - location: deploy2.sh
+      timeout: 300
+      runas: ubuntu

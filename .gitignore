@@ -1,0 +1,22 @@
+# Her iki projede de .env dosyaları commit'lenmemeli
+junius-app-backend-main/.env
+junius-app-front-main/.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+db.sqlite3
+junius-app-backend-main/staticfiles/
+junius-app-backend-main/media/
+
+# Node / Bun
+node_modules/
+junius-app-front-main/.next/
+junius-app-front-main/out/
+junius-app-front-main/dist/
+
+# OS
+.DS_Store
+Thumbs.db

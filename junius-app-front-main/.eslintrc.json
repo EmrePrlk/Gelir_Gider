@@ -1,0 +1,227 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "plugins": [
+    "perfectionist",
+    "@typescript-eslint",
+    "prettier",
+    "react-hooks",
+    "unicorn",
+    "unused-imports"
+  ],
+  "extends": [
+    "plugin:@next/next/recommended",
+    "plugin:@typescript-eslint/recommended-type-checked",
+    "plugin:@typescript-eslint/stylistic-type-checked",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:unicorn/recommended",
+    "plugin:promise/recommended",
+    "airbnb",
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "project": "./tsconfig.json"
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    }
+  },
+  "rules": {
+    "@typescript-eslint/array-type": "off",
+    "@typescript-eslint/consistent-type-definitions": "off",
+
+    "@typescript-eslint/consistent-type-imports": [
+      "warn",
+      {
+        "prefer": "type-imports",
+        "fixStyle": "inline-type-imports"
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
+    ],
+    "no-unused-vars": [
+      "warn",
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
+    ],
+    "@typescript-eslint/require-await": "off",
+    "@typescript-eslint/no-misused-promises": [
+      "warn",
+      {
+        "checksVoidReturn": { "attributes": false }
+      }
+    ],
+    "@typescript-eslint/naming-convention": [
+      "warn",
+      {
+        "selector": "variable",
+        "format": ["camelCase", "PascalCase", "UPPER_CASE"],
+        "leadingUnderscore": "allow"
+      }
+    ],
+    "import/no-cycle": "off",
+    "no-console": "warn",
+    "react-hooks/exhaustive-deps": "warn",
+    "no-prototype-builtins": "off",
+    "import/prefer-default-export": "off",
+    "import/no-default-export": "off",
+    "react/destructuring-assignment": "off",
+    "react/jsx-filename-extension": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "unicorn/prevent-abbreviations": "off",
+    "unicorn/no-array-for-each": "off",
+    "import/no-extraneous-dependencies": "off",
+    "unicorn/no-null": "off",
+    "comma-dangle": [2, "always-multiline"],
+    "@typescript-eslint/no-unsafe-enum-comparison": "off",
+    "import/extensions": "off",
+    "react/react-in-jsx-scope": "off",
+    "arrow-parens": "off",
+    "lines-around-directive": "off",
+    "react/jsx-props-no-spreading": "off",
+    "object-curly-newline": "off",
+    "@typescript-eslint/indent": "off",
+    "function-paren-newline": "off",
+    "implicit-arrow-linebreak": "off",
+    "no-plusplus": "off",
+    "no-await-in-loop": "off",
+    "operator-linebreak": "off",
+    "max-len": "off",
+    "react/require-default-props": "off",
+    "react/no-array-index-key": "off",
+    "react/no-unescaped-entities": "off",
+    "import/no-absolute-path": "off",
+    "no-void": "off",
+    "prettier/prettier": "warn",
+    "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
+
+    // MATERIAL UI THEME EXCEPTIONS
+    "@typescript-eslint/prefer-nullish-coalescing": "off",
+    "no-param-reassign": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/no-unsafe-return": "warn",
+    "@typescript-eslint/no-unsafe-member-access": "warn",
+    "unicorn/prefer-default-parameters": "warn",
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-unsafe-assignment": "warn",
+    "@typescript-eslint/no-explicit-any": "warn",
+    "unicorn/no-array-reduce": "warn",
+    "react/jsx-no-useless-fragment": "off",
+    "@typescript-eslint/unbound-method": "warn",
+    "@typescript-eslint/ban-ts-comment": "warn",
+    "no-promise-executor-return": "warn",
+    "jsx-a11y/anchor-is-valid": "warn",
+    "no-underscore-dangle": "warn",
+    "@typescript-eslint/no-unsafe-call": "warn",
+    "react/no-children-prop": "warn",
+    "react/no-unstable-nested-components": "warn",
+    "@typescript-eslint/no-unsafe-argument": "warn",
+    "@typescript-eslint/no-floating-promises": "warn",
+    "@typescript-eslint/prefer-optional-chain": "warn",
+    "unicorn/prefer-spread": "warn",
+    "unicorn/consistent-function-scoping": "warn",
+    "consistent-return": "warn",
+    "unicorn/prefer-logical-operator-over-ternary": "warn",
+    "unicorn/explicit-length-check": "warn",
+    "@typescript-eslint/no-redundant-type-constituents": "warn",
+    "promise/always-return": "warn",
+    "no-restricted-exports": "off",
+    "jsx-a11y/control-has-associated-label": "warn",
+    "unicorn/no-await-expression-member": "warn",
+    "unicorn/prefer-code-point": "warn",
+    "@typescript-eslint/restrict-template-expressions": "warn",
+    "unicorn/prefer-set-has": "warn",
+    "unicorn/no-useless-spread": "warn",
+    "unicorn/no-new-array": "warn",
+    "unicorn/prefer-optional-catch-binding": "warn",
+
+    // perfectionist
+    // https://eslint-plugin-perfectionist.azat.io/
+    "perfectionist/sort-named-imports": [
+      1,
+      {
+        "order": "asc",
+        "type": "line-length"
+      }
+    ],
+    "perfectionist/sort-named-exports": [
+      1,
+      {
+        "order": "asc",
+        "type": "line-length"
+      }
+    ],
+    "perfectionist/sort-exports": [
+      1,
+      {
+        "order": "asc",
+        "type": "line-length"
+      }
+    ],
+    "perfectionist/sort-imports": [
+      1,
+      {
+        "order": "asc",
+        "type": "line-length",
+        "newlines-between": "always",
+        "groups": [
+          ["builtin", "external"],
+          "custom-mui",
+          "custom-routes",
+          "custom-hooks",
+          "custom-utils",
+          "internal",
+          "custom-components",
+          "custom-sections",
+          "custom-types",
+          ["parent", "sibling", "index"],
+          "object",
+          "unknown"
+        ],
+        "custom-groups": {
+          "value": {
+            "custom-mui": "@mui/**",
+            "custom-routes": "src/routes/**",
+            "custom-hooks": "src/hooks/**",
+            "custom-utils": "src/utils/**",
+            "custom-components": "src/components/**",
+            "custom-sections": "src/sections/**",
+            "custom-types": "src/types/**"
+          }
+        },
+        "internal-pattern": ["src/**"]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["*.js"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off",
+        "unicorn/prefer-module": "off"
+      }
+    },
+    {
+      "files": ["commitlint.config.js"],
+      "rules": {
+        "@typescript-eslint/no-unsafe-argument": "off",
+        "@typescript-eslint/no-unsafe-assignment": "off"
+      }
+    }
+  ]
+}

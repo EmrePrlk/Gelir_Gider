@@ -1,0 +1,653 @@
+{
+  "count": 5,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 1,
+      "name": "Investor",
+      "permissions": []
+    },
+    {
+      "id": 2,
+      "name": "Developer",
+      "permissions": []
+    },
+    {
+      "id": 3,
+      "name": "Mastermind",
+      "permissions": []
+    },
+    {
+      "id": 4,
+      "name": "Admin",
+      "permissions": []
+    },
+    {
+      "id": 5,
+      "name": "Super Admin",
+      "permissions": [
+        {
+          "id": 21,
+          "name": "Can add custom user",
+          "codename": "add_customuser"
+        },
+        {
+          "id": 22,
+          "name": "Can change custom user",
+          "codename": "change_customuser"
+        },
+        {
+          "id": 23,
+          "name": "Can delete custom user",
+          "codename": "delete_customuser"
+        },
+        {
+          "id": 24,
+          "name": "Can view custom user",
+          "codename": "view_customuser"
+        },
+        {
+          "id": 25,
+          "name": "Can add user certificate",
+          "codename": "add_usercertificate"
+        },
+        {
+          "id": 26,
+          "name": "Can change user certificate",
+          "codename": "change_usercertificate"
+        },
+        {
+          "id": 27,
+          "name": "Can delete user certificate",
+          "codename": "delete_usercertificate"
+        },
+        {
+          "id": 28,
+          "name": "Can view user certificate",
+          "codename": "view_usercertificate"
+        },
+        {
+          "id": 33,
+          "name": "Can add user education",
+          "codename": "add_usereducation"
+        },
+        {
+          "id": 34,
+          "name": "Can change user education",
+          "codename": "change_usereducation"
+        },
+        {
+          "id": 35,
+          "name": "Can delete user education",
+          "codename": "delete_usereducation"
+        },
+        {
+          "id": 36,
+          "name": "Can view user education",
+          "codename": "view_usereducation"
+        },
+        {
+          "id": 37,
+          "name": "Can add user experience",
+          "codename": "add_userexperience"
+        },
+        {
+          "id": 38,
+          "name": "Can change user experience",
+          "codename": "change_userexperience"
+        },
+        {
+          "id": 39,
+          "name": "Can delete user experience",
+          "codename": "delete_userexperience"
+        },
+        {
+          "id": 40,
+          "name": "Can view user experience",
+          "codename": "view_userexperience"
+        },
+        {
+          "id": 29,
+          "name": "Can add user language",
+          "codename": "add_userlanguage"
+        },
+        {
+          "id": 30,
+          "name": "Can change user language",
+          "codename": "change_userlanguage"
+        },
+        {
+          "id": 31,
+          "name": "Can delete user language",
+          "codename": "delete_userlanguage"
+        },
+        {
+          "id": 32,
+          "name": "Can view user language",
+          "codename": "view_userlanguage"
+        },
+        {
+          "id": 117,
+          "name": "Can add user notes for hr",
+          "codename": "add_usernotesforhr"
+        },
+        {
+          "id": 118,
+          "name": "Can change user notes for hr",
+          "codename": "change_usernotesforhr"
+        },
+        {
+          "id": 119,
+          "name": "Can delete user notes for hr",
+          "codename": "delete_usernotesforhr"
+        },
+        {
+          "id": 120,
+          "name": "Can view user notes for hr",
+          "codename": "view_usernotesforhr"
+        },
+        {
+          "id": 1,
+          "name": "Can add log entry",
+          "codename": "add_logentry"
+        },
+        {
+          "id": 2,
+          "name": "Can change log entry",
+          "codename": "change_logentry"
+        },
+        {
+          "id": 3,
+          "name": "Can delete log entry",
+          "codename": "delete_logentry"
+        },
+        {
+          "id": 4,
+          "name": "Can view log entry",
+          "codename": "view_logentry"
+        },
+        {
+          "id": 9,
+          "name": "Can add group",
+          "codename": "add_group"
+        },
+        {
+          "id": 10,
+          "name": "Can change group",
+          "codename": "change_group"
+        },
+        {
+          "id": 11,
+          "name": "Can delete group",
+          "codename": "delete_group"
+        },
+        {
+          "id": 12,
+          "name": "Can view group",
+          "codename": "view_group"
+        },
+        {
+          "id": 5,
+          "name": "Can add permission",
+          "codename": "add_permission"
+        },
+        {
+          "id": 6,
+          "name": "Can change permission",
+          "codename": "change_permission"
+        },
+        {
+          "id": 7,
+          "name": "Can delete permission",
+          "codename": "delete_permission"
+        },
+        {
+          "id": 8,
+          "name": "Can view permission",
+          "codename": "view_permission"
+        },
+        {
+          "id": 85,
+          "name": "Can add idea",
+          "codename": "add_idea"
+        },
+        {
+          "id": 86,
+          "name": "Can change idea",
+          "codename": "change_idea"
+        },
+        {
+          "id": 87,
+          "name": "Can delete idea",
+          "codename": "delete_idea"
+        },
+        {
+          "id": 88,
+          "name": "Can view idea",
+          "codename": "view_idea"
+        },
+        {
+          "id": 89,
+          "name": "Can add idea process log",
+          "codename": "add_ideaprocesslog"
+        },
+        {
+          "id": 90,
+          "name": "Can change idea process log",
+          "codename": "change_ideaprocesslog"
+        },
+        {
+          "id": 91,
+          "name": "Can delete idea process log",
+          "codename": "delete_ideaprocesslog"
+        },
+        {
+          "id": 92,
+          "name": "Can view idea process log",
+          "codename": "view_ideaprocesslog"
+        },
+        {
+          "id": 113,
+          "name": "Can add interested project",
+          "codename": "add_interestedproject"
+        },
+        {
+          "id": 114,
+          "name": "Can change interested project",
+          "codename": "change_interestedproject"
+        },
+        {
+          "id": 115,
+          "name": "Can delete interested project",
+          "codename": "delete_interestedproject"
+        },
+        {
+          "id": 116,
+          "name": "Can view interested project",
+          "codename": "view_interestedproject"
+        },
+        {
+          "id": 93,
+          "name": "Can add project",
+          "codename": "add_project"
+        },
+        {
+          "id": 94,
+          "name": "Can change project",
+          "codename": "change_project"
+        },
+        {
+          "id": 95,
+          "name": "Can delete project",
+          "codename": "delete_project"
+        },
+        {
+          "id": 96,
+          "name": "Can view project",
+          "codename": "view_project"
+        },
+        {
+          "id": 97,
+          "name": "Can add project document",
+          "codename": "add_projectdocument"
+        },
+        {
+          "id": 98,
+          "name": "Can change project document",
+          "codename": "change_projectdocument"
+        },
+        {
+          "id": 99,
+          "name": "Can delete project document",
+          "codename": "delete_projectdocument"
+        },
+        {
+          "id": 100,
+          "name": "Can view project document",
+          "codename": "view_projectdocument"
+        },
+        {
+          "id": 109,
+          "name": "Can add project investment",
+          "codename": "add_projectinvestment"
+        },
+        {
+          "id": 110,
+          "name": "Can change project investment",
+          "codename": "change_projectinvestment"
+        },
+        {
+          "id": 111,
+          "name": "Can delete project investment",
+          "codename": "delete_projectinvestment"
+        },
+        {
+          "id": 112,
+          "name": "Can view project investment",
+          "codename": "view_projectinvestment"
+        },
+        {
+          "id": 121,
+          "name": "Can add project link",
+          "codename": "add_projectlink"
+        },
+        {
+          "id": 122,
+          "name": "Can change project link",
+          "codename": "change_projectlink"
+        },
+        {
+          "id": 123,
+          "name": "Can delete project link",
+          "codename": "delete_projectlink"
+        },
+        {
+          "id": 124,
+          "name": "Can view project link",
+          "codename": "view_projectlink"
+        },
+        {
+          "id": 105,
+          "name": "Can add project staff",
+          "codename": "add_projectstaff"
+        },
+        {
+          "id": 106,
+          "name": "Can change project staff",
+          "codename": "change_projectstaff"
+        },
+        {
+          "id": 107,
+          "name": "Can delete project staff",
+          "codename": "delete_projectstaff"
+        },
+        {
+          "id": 108,
+          "name": "Can view project staff",
+          "codename": "view_projectstaff"
+        },
+        {
+          "id": 101,
+          "name": "Can add project status",
+          "codename": "add_projectstatus"
+        },
+        {
+          "id": 102,
+          "name": "Can change project status",
+          "codename": "change_projectstatus"
+        },
+        {
+          "id": 103,
+          "name": "Can delete project status",
+          "codename": "delete_projectstatus"
+        },
+        {
+          "id": 104,
+          "name": "Can view project status",
+          "codename": "view_projectstatus"
+        },
+        {
+          "id": 13,
+          "name": "Can add content type",
+          "codename": "add_contenttype"
+        },
+        {
+          "id": 14,
+          "name": "Can change content type",
+          "codename": "change_contenttype"
+        },
+        {
+          "id": 15,
+          "name": "Can delete content type",
+          "codename": "delete_contenttype"
+        },
+        {
+          "id": 16,
+          "name": "Can view content type",
+          "codename": "view_contenttype"
+        },
+        {
+          "id": 81,
+          "name": "Can add language",
+          "codename": "add_language"
+        },
+        {
+          "id": 82,
+          "name": "Can change language",
+          "codename": "change_language"
+        },
+        {
+          "id": 83,
+          "name": "Can delete language",
+          "codename": "delete_language"
+        },
+        {
+          "id": 84,
+          "name": "Can view language",
+          "codename": "view_language"
+        },
+        {
+          "id": 73,
+          "name": "Can add menu",
+          "codename": "add_menu"
+        },
+        {
+          "id": 74,
+          "name": "Can change menu",
+          "codename": "change_menu"
+        },
+        {
+          "id": 75,
+          "name": "Can delete menu",
+          "codename": "delete_menu"
+        },
+        {
+          "id": 76,
+          "name": "Can view menu",
+          "codename": "view_menu"
+        },
+        {
+          "id": 77,
+          "name": "Can add menu role",
+          "codename": "add_menurole"
+        },
+        {
+          "id": 78,
+          "name": "Can change menu role",
+          "codename": "change_menurole"
+        },
+        {
+          "id": 79,
+          "name": "Can delete menu role",
+          "codename": "delete_menurole"
+        },
+        {
+          "id": 80,
+          "name": "Can view menu role",
+          "codename": "view_menurole"
+        },
+        {
+          "id": 57,
+          "name": "Can add project maps juniflow",
+          "codename": "add_projectmapsjuniflow"
+        },
+        {
+          "id": 58,
+          "name": "Can change project maps juniflow",
+          "codename": "change_projectmapsjuniflow"
+        },
+        {
+          "id": 59,
+          "name": "Can delete project maps juniflow",
+          "codename": "delete_projectmapsjuniflow"
+        },
+        {
+          "id": 60,
+          "name": "Can view project maps juniflow",
+          "codename": "view_projectmapsjuniflow"
+        },
+        {
+          "id": 65,
+          "name": "Can add project partner",
+          "codename": "add_projectpartner"
+        },
+        {
+          "id": 66,
+          "name": "Can change project partner",
+          "codename": "change_projectpartner"
+        },
+        {
+          "id": 67,
+          "name": "Can delete project partner",
+          "codename": "delete_projectpartner"
+        },
+        {
+          "id": 68,
+          "name": "Can view project partner",
+          "codename": "view_projectpartner"
+        },
+        {
+          "id": 41,
+          "name": "Can add role",
+          "codename": "add_role"
+        },
+        {
+          "id": 42,
+          "name": "Can change role",
+          "codename": "change_role"
+        },
+        {
+          "id": 43,
+          "name": "Can delete role",
+          "codename": "delete_role"
+        },
+        {
+          "id": 44,
+          "name": "Can view role",
+          "codename": "view_role"
+        },
+        {
+          "id": 49,
+          "name": "Can add skill",
+          "codename": "add_skill"
+        },
+        {
+          "id": 50,
+          "name": "Can change skill",
+          "codename": "change_skill"
+        },
+        {
+          "id": 51,
+          "name": "Can delete skill",
+          "codename": "delete_skill"
+        },
+        {
+          "id": 52,
+          "name": "Can view skill",
+          "codename": "view_skill"
+        },
+        {
+          "id": 45,
+          "name": "Can add title",
+          "codename": "add_title"
+        },
+        {
+          "id": 46,
+          "name": "Can change title",
+          "codename": "change_title"
+        },
+        {
+          "id": 47,
+          "name": "Can delete title",
+          "codename": "delete_title"
+        },
+        {
+          "id": 48,
+          "name": "Can view title",
+          "codename": "view_title"
+        },
+        {
+          "id": 61,
+          "name": "Can add user maps juniflow",
+          "codename": "add_usermapsjuniflow"
+        },
+        {
+          "id": 62,
+          "name": "Can change user maps juniflow",
+          "codename": "change_usermapsjuniflow"
+        },
+        {
+          "id": 63,
+          "name": "Can delete user maps juniflow",
+          "codename": "delete_usermapsjuniflow"
+        },
+        {
+          "id": 64,
+          "name": "Can view user maps juniflow",
+          "codename": "view_usermapsjuniflow"
+        },
+        {
+          "id": 53,
+          "name": "Can add user profile type",
+          "codename": "add_userprofiletype"
+        },
+        {
+          "id": 54,
+          "name": "Can change user profile type",
+          "codename": "change_userprofiletype"
+        },
+        {
+          "id": 55,
+          "name": "Can delete user profile type",
+          "codename": "delete_userprofiletype"
+        },
+        {
+          "id": 56,
+          "name": "Can view user profile type",
+          "codename": "view_userprofiletype"
+        },
+        {
+          "id": 69,
+          "name": "Can add user role",
+          "codename": "add_userrole"
+        },
+        {
+          "id": 70,
+          "name": "Can change user role",
+          "codename": "change_userrole"
+        },
+        {
+          "id": 71,
+          "name": "Can delete user role",
+          "codename": "delete_userrole"
+        },
+        {
+          "id": 72,
+          "name": "Can view user role",
+          "codename": "view_userrole"
+        },
+        {
+          "id": 17,
+          "name": "Can add session",
+          "codename": "add_session"
+        },
+        {
+          "id": 18,
+          "name": "Can change session",
+          "codename": "change_session"
+        },
+        {
+          "id": 19,
+          "name": "Can delete session",
+          "codename": "delete_session"
+        },
+        {
+          "id": 20,
+          "name": "Can view session",
+          "codename": "view_session"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+export * from './types';
+
+/* eslint-disable no-restricted-exports */
+export { default } from './scrollbar';
