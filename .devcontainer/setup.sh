@@ -19,7 +19,10 @@ if [ ! -f .env ]; then
 fi
 
 echo "==> Backend migration çalıştırılıyor..."
-python manage.py migrate --settings=core.settings.dev
+python3 manage.py migrate --settings=core.settings.dev
+
+echo "==> Başlangıç verileri yükleniyor..."
+python3 manage.py loaddata definitions/fixtures/initial_data.json --settings=core.settings.dev
 
 echo "==> Frontend bağımlılıkları kuruluyor..."
 cd /workspaces/junius-app/junius-app-front-main
@@ -35,5 +38,5 @@ echo ""
 echo "✓ Kurulum tamamlandı!"
 echo ""
 echo "Servisleri başlatmak için:"
-echo "  Backend : cd junius-app-backend-main && python manage.py runserver --settings=core.settings.dev"
+echo "  Backend : cd junius-app-backend-main && python3 manage.py runserver --settings=core.settings.dev"
 echo "  Frontend: cd junius-app-front-main && bun dev"
