@@ -39,7 +39,7 @@ export function AbilityProvider({ children }: AbilityProviderProps) {
   } = useQuery({
     queryKey: ['ability'],
     queryFn: () => getAbility(user?.type_of_user!),
-    enabled: !!user,
+    enabled: !!user && !!user.type_of_user,
   });
 
   const defaultAbility = useMemo(() => defineAbilityFor([]), []);

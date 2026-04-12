@@ -1,7 +1,7 @@
 export enum Status {
-  ACTIVE = 'Active',
-  PENDING = 'Pending',
-  SUSPENDED = 'Suspended',
-  REJECTED = 'Rejected',
-  INACTIVE = 'Inactive',
+  ACTIVE = 'active',
+  PENDING = 'pending',
+  SUSPENDED = 'suspended',
+  REJECTED = 'rejected',
+  INACTIVE = 'inactive',
 }

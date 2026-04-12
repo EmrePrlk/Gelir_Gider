@@ -72,7 +72,7 @@ class RegisterView(CreateAPIView):
 class UserCertificateCrudView(viewsets.ModelViewSet):
     queryset = UserCertificate.objects.all()
     serializer_class = UserCertificateSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     filter_backends = (
         DjangoFilterBackend,
         filters.OrderingFilter,
@@ -100,7 +100,7 @@ class UserLanguageCrudView(viewsets.ModelViewSet):
 class UserEducationCrudView(viewsets.ModelViewSet):
     queryset = UserEducation.objects.all()
     serializer_class = UserEducationSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     filter_backends = (
         DjangoFilterBackend,
         filters.OrderingFilter,
@@ -134,6 +134,7 @@ class GroupCrudView(viewsets.ModelViewSet):
 class UserNotesForHRCrudView(viewsets.ModelViewSet):
     queryset = UserNotesForHR.objects.all()
     serializer_class = UserNotesForHRSerializer
+    permission_classes = [IsAuthenticated]
     filter_backends = (
         DjangoFilterBackend,
         filters.OrderingFilter,
