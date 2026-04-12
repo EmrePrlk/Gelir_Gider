@@ -11,6 +11,7 @@ from .serializers import (
     ProjectLinkSerializer,
 )
 from rest_framework import status, viewsets
+from rest_framework.permissions import IsAuthenticated
 from .models import (
     Idea,
     IdeaProcessLog,
@@ -63,10 +64,15 @@ class ProjectStatusCrudView(viewsets.ModelViewSet):
 
 
 class ProjectStaffCrudView(viewsets.ModelViewSet):
-    queryset = ProjectStaff.objects.all()
     serializer_class = ProjectStaffSerializer
+    permission_classes = [IsAuthenticated]
     filter_backends = (DjangoFilterBackend,)
     filterset_class = ProjectStaffFilter
+
+    def get_queryset(self):
+        return ProjectStaff.objects.select_related(
+            'project', 'user', 'staff_role_id'
+        ).all()
 
 
 class ProjectInvestmentCrudView(viewsets.ModelViewSet):

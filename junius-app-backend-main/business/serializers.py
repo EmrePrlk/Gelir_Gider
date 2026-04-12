@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
 from .models import (
     Idea,
     IdeaProcessLog,
@@ -48,9 +49,24 @@ class ProjectStatusSerializer(serializers.ModelSerializer):
 
 
 class ProjectStaffSerializer(serializers.ModelSerializer):
+    project_id = serializers.PrimaryKeyRelatedField(
+        queryset=Project.objects.all(), source='project'
+    )
+    user_id = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.all(), source='user'
+    )
+    user_first_name = serializers.CharField(source='user.first_name', read_only=True)
+    user_last_name = serializers.CharField(source='user.last_name', read_only=True)
+    user_profile_picture = serializers.ImageField(source='user.profile_picture', read_only=True)
+    staff_role_name = serializers.CharField(source='staff_role_id.name', read_only=True)
+
     class Meta:
         model = ProjectStaff
-        fields = ['id', 'project_id', 'user_id', 'staff_role_id']
+        fields = [
+            'id', 'project_id', 'user_id',
+            'user_first_name', 'user_last_name', 'user_profile_picture',
+            'staff_role_id', 'staff_role_name',
+        ]
 
 
 class ProjectInvestmentSerializer(serializers.ModelSerializer):

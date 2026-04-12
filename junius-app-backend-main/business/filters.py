@@ -29,8 +29,8 @@ class ProjectFilter(filters.FilterSet):
 
 
 class ProjectStaffFilter(filters.FilterSet):
-    project_id = filters.NumberFilter()
-    user_id = filters.NumberFilter()
+    project_id = filters.NumberFilter(field_name='project')
+    user_id = filters.NumberFilter(field_name='user')
     staff_role_id = filters.NumberFilter()
 
     class Meta:

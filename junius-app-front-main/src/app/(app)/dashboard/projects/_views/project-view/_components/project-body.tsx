@@ -5,6 +5,7 @@ import ProjectNotes from './project-notes';
 import ProjectSocial from './project-social';
 import ProjectDetail from './project-detail';
 import ProjectIdeaDoc from './project-idea-doc';
+import ProjectTeam from './project-team';
 import ProjectBurndownChart from './project-burndown-chart';
 import ProjectPieChartPublic from './project-pie-chart-public';
 import ProjectPieChartPrivate from './project-pie-chart-private';
@@ -15,6 +16,7 @@ export default function ProjectBody() {
     <Stack spacing={2} sx={{ mt: 4 }}>
       {/* TODO: Connect project social to the backend */}
       <ProjectSocial />
+      <ProjectTeam />
       {/* TODO: Connect project info to the backend, only for the: team_leader, and the point_of_contact */}
       <ProjectInfo />
       {/* TODO: Connect project burndown chart to the backend */}

@@ -90,16 +90,15 @@ class ProjectStatus(models.Model):
 
 
 class ProjectStaff(models.Model):
-    # ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True)
-    project_id = models.IntegerField()
-    # models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
-    user_id = models.IntegerField()
-    # models.ForeignKey(Title, on_delete=models.SET_NULL, null=True, blank=True)
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, null=True, blank=True, related_name='staff')
+    user = models.ForeignKey(
+        'accounts.CustomUser', on_delete=models.CASCADE, null=True, blank=True, related_name='project_staff')
     staff_role_id = models.ForeignKey(
         'definitions.Title', on_delete=models.CASCADE, null=True, blank=True, default=1)
 
     def __str__(self):
-        return f"{self.user_id}"
+        return f"{self.user}"
 
 
 class ProjectInvestment(models.Model):
