@@ -1,0 +1,8 @@
+[
+  {"model": "portfolio.assetclass", "pk": 1, "fields": {"name": "Altın", "key": "gold", "color": "#F59E0B"}},
+  {"model": "portfolio.assetclass", "pk": 2, "fields": {"name": "Fon", "key": "fund", "color": "#4F8EF7"}},
+  {"model": "portfolio.assetclass", "pk": 3, "fields": {"name": "Hisse", "key": "stock", "color": "#34D399"}},
+  {"model": "portfolio.assetclass", "pk": 4, "fields": {"name": "Kripto", "key": "crypto", "color": "#A78BFA"}},
+  {"model": "portfolio.assetclass", "pk": 5, "fields": {"name": "Döviz", "key": "forex", "color": "#EC4899"}},
+  {"model": "portfolio.assetclass", "pk": 6, "fields": {"name": "Diğer", "key": "other", "color": "#94A3B8"}}
+]
