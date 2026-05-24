@@ -1,23 +1,29 @@
-# Her iki projede de .env dosyaları commit'lenmemeli
-junius-app-backend-main/.env
-junius-app-front-main/.env
+# ── Env dosyaları (asla commit edilmez) ───────────────────────────────────
+.env
+backend/.env
+frontend/.env.local
 
-# Python
+# ── Python ────────────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
+*.egg-info/
+dist/
+build/
 db.sqlite3
-junius-app-backend-main/staticfiles/
-junius-app-backend-main/media/
+backend/staticfiles/
+backend/media/
 
-# Node / Bun
+# ── Node ──────────────────────────────────────────────────────────────────
 node_modules/
-junius-app-front-main/.next/
-junius-app-front-main/out/
-junius-app-front-main/dist/
+frontend/.next/
+frontend/out/
+frontend/dist/
 
-# OS
+# ── OS ────────────────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
+
+# ── gstack (local dev tool) ───────────────────────────────────────────────
 .gstack/

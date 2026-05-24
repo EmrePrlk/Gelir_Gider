@@ -2,7 +2,12 @@ import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import { z } from 'zod'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+// Server-side (NextAuth) → Docker internal network doğrudan backend'e ulaşır.
+// Client-side → NEXT_PUBLIC_API_URL (public domain, nginx üzerinden).
+const API_URL =
+  typeof window === 'undefined'
+    ? process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+    : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
 async function getDjangoTokens(email: string, password: string) {
   const res = await fetch(`${API_URL}/api/v1/auth/token/`, {
