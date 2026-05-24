@@ -1,8 +1,0 @@
-.git
-DevOps/
-.vscode/
-.gitlab/issue_templates/
-.coveragerc
-# .env
-.gitignore
-README.md

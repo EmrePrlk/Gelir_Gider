@@ -20,3 +20,4 @@ junius-app-front-main/dist/
 # OS
 .DS_Store
 Thumbs.db
+.gstack/
