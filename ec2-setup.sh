@@ -15,7 +15,7 @@ usermod -aG docker ubuntu
 echo "==> Cloning repository..."
 mkdir -p /app
 cd /app
-git clone https://github.com/EmrePrlk/claude_ai.git dashboard
+git clone https://github.com/EmrePrlk/Gelir_Gider.git dashboard
 cd dashboard
 
 echo "==> Creating .env from example..."
