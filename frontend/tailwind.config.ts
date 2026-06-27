@@ -43,6 +43,7 @@ const config: Config = {
       },
       spacing: {
         '4.5': '18px',
+        'sidebar': '64px',
       },
       transitionDuration: {
         '150': '150ms',
