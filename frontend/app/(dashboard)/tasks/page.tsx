@@ -82,7 +82,7 @@ export default function TasksPage() {
     await createMutation.mutateAsync({
       title,
       priority,
-      due_date: new Date().toISOString().split('T')[0],
+      due_date: new Date().toLocaleDateString('en-CA'),
     })
   }
 
@@ -91,7 +91,7 @@ export default function TasksPage() {
   const pct = todayTasks.length > 0 ? (doneTasks.length / todayTasks.length) * 100 : 0
 
   const weekDays = getWeekDays()
-  const todayStr = new Date().toISOString().split('T')[0]
+  const todayStr = new Date().toLocaleDateString('en-CA')
 
   return (
     <PageWrapper>
@@ -243,7 +243,7 @@ export default function TasksPage() {
               style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}
             >
               {weekDays.map((day) => {
-                const key = day.toISOString().split('T')[0]
+                const key = day.toLocaleDateString('en-CA')
                 const dayTasks = (weeklyData as Record<string, Task[]>)[key] ?? []
                 const done = dayTasks.filter((t) => t.status === 'done').length
                 const total = dayTasks.length

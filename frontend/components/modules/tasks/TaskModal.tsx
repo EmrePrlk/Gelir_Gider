@@ -33,7 +33,7 @@ export default function TaskModal({ onClose, onSave, defaultDate }: TaskModalPro
     resolver: zodResolver(schema),
     defaultValues: {
       priority: 'medium',
-      due_date: defaultDate ?? new Date().toISOString().split('T')[0],
+      due_date: defaultDate ?? new Date().toLocaleDateString('en-CA'),
     },
   })
 

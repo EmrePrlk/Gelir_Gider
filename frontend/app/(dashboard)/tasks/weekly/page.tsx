@@ -50,7 +50,7 @@ export default function WeeklyPage() {
   })
 
   const weekDays = getWeekDays()
-  const todayStr = new Date().toISOString().split('T')[0]
+  const todayStr = new Date().toLocaleDateString('en-CA')
 
   const handleAddForDay = (dateStr: string) => {
     setModalDate(dateStr)
@@ -88,7 +88,7 @@ export default function WeeklyPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
           {weekDays.map((day, idx) => {
-            const key = day.toISOString().split('T')[0]
+            const key = day.toLocaleDateString('en-CA')
             const tasks: Task[] = (weeklyData as Record<string, Task[]>)[key] ?? []
             const done = tasks.filter((t) => t.status === 'done').length
             const isToday = key === todayStr
