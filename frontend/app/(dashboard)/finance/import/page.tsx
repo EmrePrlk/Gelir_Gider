@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import Link from 'next/link'
 import PageWrapper from '@/components/layout/PageWrapper'
 import Button from '@/components/ui/Button'
@@ -17,12 +17,14 @@ function fmt(n: number) {
 
 export default function ImportPage() {
   const router = useRouter()
+  const queryClient = useQueryClient()
   const [isDragOver, setIsDragOver] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [preview, setPreview] = useState<ImportPreviewRow[] | null>(null)
   const [editedRows, setEditedRows] = useState<ImportPreviewRow[]>([])
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [savedCount, setSavedCount] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
   const { data: categories = [] } = useQuery({
@@ -64,6 +66,12 @@ export default function ImportPage() {
     setSaving(true)
     try {
       const result = await financeApi.importConfirm(editedRows)
+      if (result.created === 0) {
+        setError('Hiçbir işlem kaydedilemedi. Tarih veya tutar formatını kontrol edin.')
+        return
+      }
+      await queryClient.invalidateQueries({ queryKey: ['finance'] })
+      setSavedCount(result.created)
       setSaved(true)
       setTimeout(() => router.push('/finance'), 1500)
     } catch (e: any) {
@@ -144,7 +152,7 @@ export default function ImportPage() {
       ) : saved ? (
         <div className="flex flex-col items-center justify-center py-24 text-center">
           <CheckCircle2 className="w-16 h-16 mb-4" style={{ color: 'var(--success)' }} />
-          <p className="text-text-primary font-medium text-lg">İşlemler kaydedildi!</p>
+          <p className="text-text-primary font-medium text-lg">{savedCount} işlem kaydedildi!</p>
           <p className="text-text-muted text-sm mt-1">Ana sayfaya yönlendiriliyor...</p>
         </div>
       ) : (
