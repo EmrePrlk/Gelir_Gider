@@ -91,7 +91,7 @@ export default function ImportPage() {
         </Link>
         <div>
           <h1 className="font-display text-2xl font-bold text-text-primary">İçe Aktarma</h1>
-          <p className="text-sm text-text-muted mt-0.5">CSV veya PDF banka ekstresi yükle</p>
+          <p className="text-sm text-text-muted mt-0.5">CSV, PDF veya Excel banka ekstresi yükle</p>
         </div>
       </div>
 
@@ -114,7 +114,7 @@ export default function ImportPage() {
           <input
             id="file-input"
             type="file"
-            accept=".csv,.pdf"
+            accept=".csv,.pdf,.xlsx,.xls"
             className="hidden"
             onChange={handleInputChange}
           />
@@ -131,7 +131,7 @@ export default function ImportPage() {
               >
                 <Upload className="w-8 h-8" style={{ color: 'var(--accent)' }} />
               </div>
-              <p className="text-text-primary font-medium">CSV veya PDF dosyası yükle</p>
+              <p className="text-text-primary font-medium">CSV, PDF veya Excel dosyası yükle</p>
               <p className="text-text-muted text-sm">Sürükle bırak veya tıkla</p>
               <p className="text-xs text-text-muted">Claude AI kategorileri otomatik tespit eder</p>
             </div>

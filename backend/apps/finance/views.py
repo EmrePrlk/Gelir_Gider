@@ -24,7 +24,7 @@ from .serializers import (
 logger = logging.getLogger(__name__)
 
 PARSE_SYSTEM_PROMPT = """
-Sen bir banka ekstresi parser'ısın. Sana verilen CSV veya PDF metnini analiz edip
+Sen bir banka ekstresi parser'ısın. Sana verilen CSV, PDF veya Excel metnini analiz edip
 her işlem satırı için JSON çıktısı üreteceksin.
 
 Kurallar:
@@ -42,7 +42,7 @@ Boş veya başlık satırlarını atla. Sadece gerçek işlem satırlarını dö
 
 
 def _extract_text_from_file(uploaded_file) -> str:
-    """Extract text from uploaded CSV or PDF file."""
+    """Extract text from uploaded CSV, PDF or Excel file."""
     name = uploaded_file.name.lower()
 
     if name.endswith('.csv'):
@@ -59,7 +59,22 @@ def _extract_text_from_file(uploaded_file) -> str:
             logger.error("PDF extraction failed: %s", e)
             raise ValueError("PDF dosyası okunamadı")
 
-    raise ValueError("Sadece CSV veya PDF dosyaları desteklenir")
+    if name.endswith('.xlsx') or name.endswith('.xls'):
+        try:
+            wb = openpyxl.load_workbook(io.BytesIO(uploaded_file.read()), read_only=True, data_only=True)
+            ws = wb.active
+            lines = []
+            for row in ws.iter_rows(values_only=True):
+                cells = [str(c) if c is not None else '' for c in row]
+                if any(c.strip() for c in cells):
+                    lines.append('\t'.join(cells))
+            wb.close()
+            return '\n'.join(lines)
+        except Exception as e:
+            logger.error("Excel extraction failed: %s", e)
+            raise ValueError("Excel dosyası okunamadı")
+
+    raise ValueError("Sadece CSV, PDF veya Excel (.xlsx) dosyaları desteklenir")
 
 
 def _call_anthropic(text: str) -> list[dict]:
