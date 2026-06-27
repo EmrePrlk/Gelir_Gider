@@ -25,7 +25,7 @@ export const habitsApi = {
     toggle: (habitId: number, date?: string) =>
       api.post<ToggleResult>(`${BASE}/logs/toggle/`, {
         habit: habitId,
-        date: date ?? new Date().toISOString().split('T')[0],
+        date: date ?? new Date().toLocaleDateString('en-CA'),
       }),
 
     heatmap: () => api.get<HeatmapEntry[]>(`${BASE}/logs/heatmap/`),
