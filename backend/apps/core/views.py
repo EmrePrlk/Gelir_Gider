@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date
 from decimal import Decimal
 
 from django.db.models import Sum
@@ -69,21 +69,41 @@ class DashboardSummaryView(APIView):
         ).aggregate(s=Sum('amount'))['s'] or Decimal('0')
         month_net = float(income) - float(expense)
 
-        # ── Finance: 12-month trend ─────────────────────────────────────
+        # ── Finance: 12-month trend — single query, correct month arithmetic ──
+        start_month = today.month - 11
+        start_year = today.year
+        while start_month <= 0:
+            start_month += 12
+            start_year -= 1
+        trend_start = date(start_year, start_month, 1)
+
+        monthly_agg = (
+            Transaction.objects
+            .filter(user=user, date__gte=trend_start)
+            .values('date__year', 'date__month', 'type')
+            .annotate(total=Sum('amount'))
+        )
+        monthly_lookup: dict = {}
+        for row in monthly_agg:
+            key = (row['date__year'], row['date__month'])
+            if key not in monthly_lookup:
+                monthly_lookup[key] = {'income': Decimal('0'), 'expense': Decimal('0')}
+            if row['type'] in ('income', 'expense'):
+                monthly_lookup[key][row['type']] = row['total']
+
         trend_months = []
         for i in range(11, -1, -1):
-            ref = today.replace(day=1) - timedelta(days=i * 28)
-            ref = ref.replace(day=1)
-            label = ref.strftime('%Y-%m')
-            m_inc = Transaction.objects.filter(
-                user=user, type='income',
-                date__year=ref.year, date__month=ref.month,
-            ).aggregate(s=Sum('amount'))['s'] or Decimal('0')
-            m_exp = Transaction.objects.filter(
-                user=user, type='expense',
-                date__year=ref.year, date__month=ref.month,
-            ).aggregate(s=Sum('amount'))['s'] or Decimal('0')
-            trend_months.append({'month': label, 'income': float(m_inc), 'expense': float(m_exp)})
+            month = today.month - i
+            year = today.year
+            while month <= 0:
+                month += 12
+                year -= 1
+            data = monthly_lookup.get((year, month), {})
+            trend_months.append({
+                'month': f"{year}-{month:02d}",
+                'income': float(data.get('income', Decimal('0'))),
+                'expense': float(data.get('expense', Decimal('0'))),
+            })
 
         # ── Tasks: today ────────────────────────────────────────────────
         today_tasks_qs = Task.objects.filter(

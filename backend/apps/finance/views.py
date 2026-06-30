@@ -79,33 +79,20 @@ def _extract_text_from_file(uploaded_file) -> str:
 
 def _call_anthropic(text: str) -> list[dict]:
     """Send text to Anthropic API and return parsed transaction list."""
+    from apps.core.ai import call_anthropic
+
+    raw = call_anthropic(PARSE_SYSTEM_PROMPT, text)
+    if not raw:
+        return _fallback_csv_parse(text)
+
     try:
-        import anthropic
-        from django.conf import settings
-
-        api_key = getattr(settings, 'ANTHROPIC_API_KEY', None)
-        if not api_key:
-            return _fallback_csv_parse(text)
-
-        client = anthropic.Anthropic(api_key=api_key)
-        message = client.messages.create(
-            model="claude-3-5-haiku-20241022",
-            max_tokens=4096,
-            system=PARSE_SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": text[:12000]}],
-        )
-        raw = message.content[0].text.strip()
-
-        # Strip markdown code blocks if present
         if raw.startswith('```'):
             raw = raw.split('```')[1]
             if raw.startswith('json'):
                 raw = raw[4:]
-
         return json.loads(raw)
-
     except Exception as e:
-        logger.error("Anthropic API call failed: %s", e)
+        logger.error("JSON parse failed: %s", e)
         return _fallback_csv_parse(text)
 
 
@@ -210,7 +197,27 @@ class SummaryView(APIView):
         income = current.filter(type='income').aggregate(s=Sum('amount'))['s'] or Decimal('0')
         expense = current.filter(type='expense').aggregate(s=Sum('amount'))['s'] or Decimal('0')
 
-        # Last 12 months trend
+        # Last 12 months trend — single query grouped by year/month/type
+        start_month = today.month - 11
+        start_year = today.year
+        while start_month <= 0:
+            start_month += 12
+            start_year -= 1
+        trend_start = date(start_year, start_month, 1)
+
+        monthly_agg = (
+            base.filter(date__gte=trend_start)
+            .values('date__year', 'date__month', 'type')
+            .annotate(total=Sum('amount'))
+        )
+        monthly_lookup: dict = {}
+        for row in monthly_agg:
+            key = (row['date__year'], row['date__month'])
+            if key not in monthly_lookup:
+                monthly_lookup[key] = {'income': Decimal('0'), 'expense': Decimal('0')}
+            if row['type'] in ('income', 'expense'):
+                monthly_lookup[key][row['type']] = row['total']
+
         trend = []
         for i in range(11, -1, -1):
             month = today.month - i
@@ -218,19 +225,11 @@ class SummaryView(APIView):
             while month <= 0:
                 month += 12
                 year -= 1
-            m_start = date(year, month, 1)
-            if month == 12:
-                m_end = date(year + 1, 1, 1)
-            else:
-                m_end = date(year, month + 1, 1)
-
-            month_qs = base.filter(date__gte=m_start, date__lt=m_end)
-            m_income = month_qs.filter(type='income').aggregate(s=Sum('amount'))['s'] or Decimal('0')
-            m_expense = month_qs.filter(type='expense').aggregate(s=Sum('amount'))['s'] or Decimal('0')
+            data = monthly_lookup.get((year, month), {})
             trend.append({
                 'month': f"{year}-{month:02d}",
-                'income': float(m_income),
-                'expense': float(m_expense),
+                'income': float(data.get('income', Decimal('0'))),
+                'expense': float(data.get('expense', Decimal('0'))),
             })
 
         return Response({
