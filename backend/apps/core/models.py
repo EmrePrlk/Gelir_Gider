@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 
 class User(AbstractUser):
@@ -14,3 +16,21 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+class WeeklyInsight(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='weekly_insights',
+    )
+    week_start = models.DateField()
+    content = models.TextField()
+    generated_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = ['user', 'week_start']
+        ordering = ['-week_start']
+
+    def __str__(self):
+        return f"Insight {self.user.email} — {self.week_start}"
