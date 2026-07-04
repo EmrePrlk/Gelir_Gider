@@ -59,23 +59,18 @@ class GenerateInsightTests(TestCase):
     def setUp(self):
         self.user = _make_user('insight@test.com')
 
-    @override_settings(ANTHROPIC_API_KEY='test-key')
+    @override_settings(GEMINI_API_KEY='test-key')
     def test_insight_saved_to_db(self):
         from apps.core.insight import generate_insight_for_user
 
-        mock_content = MagicMock()
-        mock_content.text = 'Bu hafta harika gitti!'
-        mock_message = MagicMock()
-        mock_message.content = [mock_content]
-
-        with patch('anthropic.Anthropic') as mock_cls:
-            mock_cls.return_value.messages.create.return_value = mock_message
+        with patch('google.generativeai.GenerativeModel') as mock_cls:
+            mock_cls.return_value.generate_content.return_value = MagicMock(text='Bu hafta harika gitti!')
             generate_insight_for_user(self.user)
 
         insight = WeeklyInsight.objects.get(user=self.user)
         self.assertEqual(insight.content, 'Bu hafta harika gitti!')
 
-    @override_settings(ANTHROPIC_API_KEY='')
+    @override_settings(GEMINI_API_KEY='')
     def test_no_key_saves_fallback_message(self):
         from apps.core.insight import generate_insight_for_user
         generate_insight_for_user(self.user)
@@ -83,7 +78,7 @@ class GenerateInsightTests(TestCase):
         self.assertIsNotNone(insight)
         self.assertGreater(len(insight.content), 0)
 
-    @override_settings(ANTHROPIC_API_KEY='test-key')
+    @override_settings(GEMINI_API_KEY='test-key')
     def test_regenerate_updates_existing(self):
         from apps.core.insight import generate_insight_for_user
         today = date.today()
@@ -92,13 +87,8 @@ class GenerateInsightTests(TestCase):
             user=self.user, week_start=week_start, content='Eski içgörü'
         )
 
-        mock_content = MagicMock()
-        mock_content.text = 'Yeni içgörü'
-        mock_message = MagicMock()
-        mock_message.content = [mock_content]
-
-        with patch('anthropic.Anthropic') as mock_cls:
-            mock_cls.return_value.messages.create.return_value = mock_message
+        with patch('google.generativeai.GenerativeModel') as mock_cls:
+            mock_cls.return_value.generate_content.return_value = MagicMock(text='Yeni içgörü')
             generate_insight_for_user(self.user)
 
         self.assertEqual(WeeklyInsight.objects.filter(user=self.user).count(), 1)
