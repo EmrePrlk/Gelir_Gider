@@ -5,6 +5,13 @@ from django.core.management.base import BaseCommand
 logger = logging.getLogger(__name__)
 
 
+def run_weekly_insight_job():
+    from apps.core.insight import generate_insight_for_all_users
+    logger.info('Haftalık içgörü üretiliyor...')
+    generate_insight_for_all_users()
+    logger.info('Haftalık içgörü tamamlandı.')
+
+
 class Command(BaseCommand):
     help = 'Haftalık içgörü scheduler\'ını başlatır (blocking — Docker service olarak çalışır)'
 
@@ -16,14 +23,8 @@ class Command(BaseCommand):
         scheduler = BlockingScheduler(timezone='Europe/Istanbul')
         scheduler.add_jobstore(DjangoJobStore(), 'default')
 
-        def weekly_insight_job():
-            from apps.core.insight import generate_insight_for_all_users
-            self.stdout.write('Haftalık içgörü üretiliyor...')
-            generate_insight_for_all_users()
-            self.stdout.write(self.style.SUCCESS('Tamamlandı.'))
-
         scheduler.add_job(
-            weekly_insight_job,
+            run_weekly_insight_job,
             trigger=CronTrigger(day_of_week='mon', hour=9, minute=0),
             id='weekly_insight_job',
             jobstore='default',
