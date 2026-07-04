@@ -12,8 +12,18 @@ def run_weekly_insight_job():
     logger.info('Haftalık içgörü tamamlandı.')
 
 
+def run_morning_notification_job():
+    from apps.core.models import PushSubscription
+    from apps.core.notifications import send_push_to_user
+    logger.info('Sabah bildirimleri gönderiliyor...')
+    subs = PushSubscription.objects.select_related('user').all()
+    for sub in subs:
+        send_push_to_user(sub.user)
+    logger.info('Sabah bildirimleri tamamlandı.')
+
+
 class Command(BaseCommand):
-    help = 'Haftalık içgörü scheduler\'ını başlatır (blocking — Docker service olarak çalışır)'
+    help = 'Scheduler\'ı başlatır (blocking — Docker service olarak çalışır)'
 
     def handle(self, *args, **options):
         from apscheduler.schedulers.blocking import BlockingScheduler
@@ -32,7 +42,16 @@ class Command(BaseCommand):
             misfire_grace_time=3600,
         )
 
-        self.stdout.write('Scheduler başlatıldı. Her Pazartesi 09:00 çalışır.')
+        scheduler.add_job(
+            run_morning_notification_job,
+            trigger=CronTrigger(hour=10, minute=0),
+            id='morning_notification_job',
+            jobstore='default',
+            replace_existing=True,
+            misfire_grace_time=3600,
+        )
+
+        self.stdout.write('Scheduler başlatıldı. Her gün 10:00 bildirim, her Pazartesi 09:00 içgörü.')
         try:
             scheduler.start()
         except (KeyboardInterrupt, SystemExit):
