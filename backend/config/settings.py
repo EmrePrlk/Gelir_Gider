@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'django_apscheduler',
     'apps.core',
     'apps.finance',
     'apps.habits',
@@ -112,3 +113,6 @@ CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:
 CORS_ALLOW_CREDENTIALS = True
 
 ANTHROPIC_API_KEY = config('ANTHROPIC_API_KEY', default='')
+
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+APSCHEDULER_RUN_NOW_TIMEOUT = 25

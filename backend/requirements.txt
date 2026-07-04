@@ -10,3 +10,4 @@ openpyxl==3.1.5
 pdfminer.six==20231228
 anthropic==0.34.2
 gunicorn==22.0.0
+django-apscheduler==0.3.7
