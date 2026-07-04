@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Syne, DM_Sans, DM_Mono } from 'next/font/google'
 import './globals.css'
 import Providers from './providers'
+import PWARegister from '@/components/PWARegister'
 
 const syne = Syne({
   subsets: ['latin'],
@@ -36,6 +37,7 @@ export default function RootLayout({
     <html lang="tr" className={`${syne.variable} ${dmSans.variable} ${dmMono.variable}`}>
       <body>
         <Providers>{children}</Providers>
+        <PWARegister />
       </body>
     </html>
   )
