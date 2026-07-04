@@ -6,7 +6,8 @@ import PageWrapper from '@/components/layout/PageWrapper'
 import Button from '@/components/ui/Button'
 import { dashboardApi } from '@/lib/api/dashboard'
 import { financeApi } from '@/lib/api/finance'
-import { User, Lock, Database, CheckCircle2, AlertCircle } from 'lucide-react'
+import { pushApi } from '@/lib/api/push'
+import { User, Lock, Database, CheckCircle2, AlertCircle, Bell, BellOff } from 'lucide-react'
 
 const inputClass = 'w-full bg-transparent border rounded-card px-3 py-2 text-sm text-text-primary placeholder:text-text-muted outline-none focus:border-accent transition-colors'
 const inputStyle = { borderColor: 'var(--border)' }
@@ -51,6 +52,40 @@ export default function SettingsPage() {
 
   const [pw, setPw] = useState({ current_password: '', new_password: '', confirm: '' })
   const [pwMsg, setPwMsg] = useState<{ text: string; type: 'success' | 'error' } | null>(null)
+
+  const [pushEnabled, setPushEnabled] = useState(pushApi.isSubscribed())
+  const [pushMsg, setPushMsg] = useState<{ text: string; type: 'success' | 'error' } | null>(null)
+  const [pushLoading, setPushLoading] = useState(false)
+
+  const handlePushToggle = async () => {
+    setPushLoading(true)
+    setPushMsg(null)
+    try {
+      if (pushEnabled) {
+        await pushApi.unsubscribe()
+        setPushEnabled(false)
+        setPushMsg({ text: 'Bildirimler kapatıldı.', type: 'success' })
+      } else {
+        const permission = await Notification.requestPermission()
+        if (permission !== 'granted') {
+          setPushMsg({ text: 'Bildirim izni verilmedi.', type: 'error' })
+          return
+        }
+        const ok = await pushApi.subscribe()
+        if (ok) {
+          setPushEnabled(true)
+          setPushMsg({ text: "Bildirimler açıldı. Her sabah 10:00'da hatırlatıcı alacaksın.", type: 'success' })
+        } else {
+          setPushMsg({ text: 'Bildirim kaydedilemedi.', type: 'error' })
+        }
+      }
+    } catch {
+      setPushMsg({ text: 'Bir hata oluştu.', type: 'error' })
+    } finally {
+      setPushLoading(false)
+      setTimeout(() => setPushMsg(null), 4000)
+    }
+  }
 
   const { data: excelSchema } = useQuery({
     queryKey: ['finance', 'excel-schema'],
@@ -212,6 +247,30 @@ export default function SettingsPage() {
           ) : (
             <p className="text-text-muted text-sm">Henüz bir içe aktarma şeması kaydedilmemiş.</p>
           )}
+        </Section>
+
+        {/* Notifications */}
+        <Section title="Bildirimler" icon={pushEnabled ? Bell : BellOff}>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-text-primary">Sabah bildirimleri</p>
+              <p className="text-xs text-text-muted mt-0.5">
+                Her sabah 10:00&apos;da tamamlanmamış görev ve alışkanlıkların için hatırlatıcı
+              </p>
+            </div>
+            <button
+              onClick={handlePushToggle}
+              disabled={pushLoading}
+              className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none disabled:opacity-50"
+              style={{ backgroundColor: pushEnabled ? 'var(--accent)' : 'var(--border)' }}
+            >
+              <span
+                className="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+                style={{ transform: pushEnabled ? 'translateX(24px)' : 'translateX(4px)' }}
+              />
+            </button>
+          </div>
+          {pushMsg && <Toast message={pushMsg.text} type={pushMsg.type} />}
         </Section>
       </div>
     </PageWrapper>
