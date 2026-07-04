@@ -63,8 +63,8 @@ class GenerateInsightTests(TestCase):
     def test_insight_saved_to_db(self):
         from apps.core.insight import generate_insight_for_user
 
-        with patch('google.generativeai.GenerativeModel') as mock_cls:
-            mock_cls.return_value.generate_content.return_value = MagicMock(text='Bu hafta harika gitti!')
+        with patch('google.genai.Client') as mock_cls:
+            mock_cls.return_value.models.generate_content.return_value = MagicMock(text='Bu hafta harika gitti!')
             generate_insight_for_user(self.user)
 
         insight = WeeklyInsight.objects.get(user=self.user)
@@ -87,8 +87,8 @@ class GenerateInsightTests(TestCase):
             user=self.user, week_start=week_start, content='Eski içgörü'
         )
 
-        with patch('google.generativeai.GenerativeModel') as mock_cls:
-            mock_cls.return_value.generate_content.return_value = MagicMock(text='Yeni içgörü')
+        with patch('google.genai.Client') as mock_cls:
+            mock_cls.return_value.models.generate_content.return_value = MagicMock(text='Yeni içgörü')
             generate_insight_for_user(self.user)
 
         self.assertEqual(WeeklyInsight.objects.filter(user=self.user).count(), 1)

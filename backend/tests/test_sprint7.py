@@ -112,8 +112,8 @@ class ClaudeApiFallbackTests(TestCase):
         """API error should not raise — returns empty string."""
         from apps.core.ai import call_anthropic
 
-        with patch('google.generativeai.GenerativeModel') as mock_cls:
-            mock_cls.return_value.generate_content.side_effect = Exception("connection refused")
+        with patch('google.genai.Client') as mock_cls:
+            mock_cls.return_value.models.generate_content.side_effect = Exception("connection refused")
             result = call_anthropic("system prompt", "user text")
 
         self.assertEqual(result, '')
@@ -122,8 +122,8 @@ class ClaudeApiFallbackTests(TestCase):
     def test_call_anthropic_returns_response_text(self):
         from apps.core.ai import call_anthropic
 
-        with patch('google.generativeai.GenerativeModel') as mock_cls:
-            mock_cls.return_value.generate_content.return_value = MagicMock(text='  hello world  ')
+        with patch('google.genai.Client') as mock_cls:
+            mock_cls.return_value.models.generate_content.return_value = MagicMock(text='  hello world  ')
             result = call_anthropic("system prompt", "user text")
 
         self.assertEqual(result, 'hello world')
