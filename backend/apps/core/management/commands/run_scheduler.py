@@ -16,17 +16,20 @@ class Command(BaseCommand):
         scheduler = BlockingScheduler(timezone='Europe/Istanbul')
         scheduler.add_jobstore(DjangoJobStore(), 'default')
 
-        @scheduler.scheduled_job(
-            CronTrigger(day_of_week='mon', hour=9, minute=0),
-            id='weekly_insight_job',
-            replace_existing=True,
-            misfire_grace_time=3600,
-        )
         def weekly_insight_job():
             from apps.core.insight import generate_insight_for_all_users
             self.stdout.write('Haftalık içgörü üretiliyor...')
             generate_insight_for_all_users()
             self.stdout.write(self.style.SUCCESS('Tamamlandı.'))
+
+        scheduler.add_job(
+            weekly_insight_job,
+            trigger=CronTrigger(day_of_week='mon', hour=9, minute=0),
+            id='weekly_insight_job',
+            jobstore='default',
+            replace_existing=True,
+            misfire_grace_time=3600,
+        )
 
         self.stdout.write('Scheduler başlatıldı. Her Pazartesi 09:00 çalışır.')
         try:
