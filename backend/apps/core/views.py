@@ -9,6 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 
 from .serializers import CustomTokenObtainPairSerializer, UserSerializer
+from .models import WeeklyInsight
 from apps.finance.models import Transaction
 from apps.tasks.models import Task
 from apps.habits.models import Habit, HabitLog
@@ -170,4 +171,30 @@ class DashboardSummaryView(APIView):
             'today_habits': today_habits,
             'today_tasks_list': today_tasks_list,
             'top_portfolio': top_portfolio,
+        })
+
+
+class WeeklyInsightView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        insight = WeeklyInsight.objects.filter(user=request.user).first()
+        if not insight:
+            return Response({'detail': 'Henüz içgörü oluşturulmadı.'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({
+            'id': insight.id,
+            'week_start': insight.week_start,
+            'content': insight.content,
+            'generated_at': insight.generated_at,
+        })
+
+    def post(self, request):
+        from .insight import generate_insight_for_user
+        generate_insight_for_user(request.user)
+        insight = WeeklyInsight.objects.filter(user=request.user).first()
+        return Response({
+            'id': insight.id,
+            'week_start': insight.week_start,
+            'content': insight.content,
+            'generated_at': insight.generated_at,
         })

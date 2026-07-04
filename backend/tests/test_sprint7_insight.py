@@ -5,6 +5,8 @@ from decimal import Decimal
 
 from django.test import TestCase, override_settings
 from django.contrib.auth import get_user_model
+from rest_framework.test import APIClient
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.core.models import WeeklyInsight
 
@@ -101,3 +103,34 @@ class GenerateInsightTests(TestCase):
 
         self.assertEqual(WeeklyInsight.objects.filter(user=self.user).count(), 1)
         self.assertEqual(WeeklyInsight.objects.get(user=self.user).content, 'Yeni içgörü')
+
+
+class WeeklyInsightViewTests(TestCase):
+
+    def setUp(self):
+        self.user = _make_user('view@test.com')
+        refresh = RefreshToken.for_user(self.user)
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
+
+    def test_get_returns_404_when_no_insight(self):
+        response = self.client.get('/api/v1/auth/dashboard/weekly-insight/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_get_returns_insight_when_exists(self):
+        today = date.today()
+        week_start = today - timedelta(days=today.weekday())
+        WeeklyInsight.objects.create(
+            user=self.user, week_start=week_start, content='Test içgörü'
+        )
+        response = self.client.get('/api/v1/auth/dashboard/weekly-insight/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['content'], 'Test içgörü')
+        self.assertEqual(str(response.data['week_start']), str(week_start))
+
+    @override_settings(ANTHROPIC_API_KEY='')
+    def test_post_generates_and_returns_insight(self):
+        response = self.client.post('/api/v1/auth/dashboard/weekly-insight/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('content', response.data)
+        self.assertEqual(WeeklyInsight.objects.filter(user=self.user).count(), 1)
