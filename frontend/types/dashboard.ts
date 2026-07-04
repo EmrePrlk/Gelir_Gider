@@ -45,3 +45,10 @@ export interface DashboardSummary {
   today_tasks_list: TodayTask[]
   top_portfolio: TopPortfolioEntry[]
 }
+
+export interface WeeklyInsight {
+  id: number
+  week_start: string
+  content: string
+  generated_at: string
+}
