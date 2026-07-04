@@ -198,3 +198,29 @@ class WeeklyInsightView(APIView):
             'content': insight.content,
             'generated_at': insight.generated_at,
         })
+
+
+class PushSubscribeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        from django.conf import settings as django_settings
+        return Response({'vapid_public_key': django_settings.VAPID_PUBLIC_KEY})
+
+    def post(self, request):
+        from .models import PushSubscription
+        endpoint = request.data.get('endpoint')
+        p256dh = request.data.get('p256dh')
+        auth = request.data.get('auth')
+        if not endpoint or not p256dh or not auth:
+            return Response({'detail': 'endpoint, p256dh ve auth zorunlu.'}, status=status.HTTP_400_BAD_REQUEST)
+        PushSubscription.objects.update_or_create(
+            user=request.user,
+            defaults={'endpoint': endpoint, 'p256dh': p256dh, 'auth': auth},
+        )
+        return Response({'detail': 'Subscription kaydedildi.'}, status=status.HTTP_201_CREATED)
+
+    def delete(self, request):
+        from .models import PushSubscription
+        PushSubscription.objects.filter(user=request.user).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
