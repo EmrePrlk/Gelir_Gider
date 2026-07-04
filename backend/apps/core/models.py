@@ -34,3 +34,18 @@ class WeeklyInsight(models.Model):
 
     def __str__(self):
         return f"Insight {self.user.email} — {self.week_start}"
+
+
+class PushSubscription(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='push_subscription',
+    )
+    endpoint = models.TextField()
+    p256dh = models.TextField()
+    auth = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"PushSubscription({self.user.email})"
