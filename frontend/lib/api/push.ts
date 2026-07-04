@@ -39,13 +39,16 @@ export const pushApi = {
   },
 
   unsubscribe: async (): Promise<void> => {
-    if ('serviceWorker' in navigator) {
-      const registration = await navigator.serviceWorker.ready
-      const sub = await registration.pushManager.getSubscription()
-      if (sub) await sub.unsubscribe()
+    try {
+      if ('serviceWorker' in navigator) {
+        const registration = await navigator.serviceWorker.ready
+        const sub = await registration.pushManager.getSubscription()
+        if (sub) await sub.unsubscribe()
+      }
+      await api.delete('/api/v1/auth/push/subscribe/')
+    } finally {
+      localStorage.removeItem('push_subscribed')
     }
-    await api.delete('/api/v1/auth/push/subscribe/')
-    localStorage.removeItem('push_subscribed')
   },
 
   isSubscribed: (): boolean => {
