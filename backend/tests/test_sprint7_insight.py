@@ -59,18 +59,20 @@ class GenerateInsightTests(TestCase):
     def setUp(self):
         self.user = _make_user('insight@test.com')
 
-    @override_settings(GEMINI_API_KEY='test-key')
+    @override_settings(GROQ_API_KEY='test-key')
     def test_insight_saved_to_db(self):
         from apps.core.insight import generate_insight_for_user
 
-        with patch('google.genai.Client') as mock_cls:
-            mock_cls.return_value.models.generate_content.return_value = MagicMock(text='Bu hafta harika gitti!')
+        with patch('groq.Groq') as mock_cls:
+            mock_cls.return_value.chat.completions.create.return_value = MagicMock(
+                choices=[MagicMock(message=MagicMock(content='Bu hafta harika gitti!'))]
+            )
             generate_insight_for_user(self.user)
 
         insight = WeeklyInsight.objects.get(user=self.user)
         self.assertEqual(insight.content, 'Bu hafta harika gitti!')
 
-    @override_settings(GEMINI_API_KEY='')
+    @override_settings(GROQ_API_KEY='')
     def test_no_key_saves_fallback_message(self):
         from apps.core.insight import generate_insight_for_user
         generate_insight_for_user(self.user)
@@ -78,7 +80,7 @@ class GenerateInsightTests(TestCase):
         self.assertIsNotNone(insight)
         self.assertGreater(len(insight.content), 0)
 
-    @override_settings(GEMINI_API_KEY='test-key')
+    @override_settings(GROQ_API_KEY='test-key')
     def test_regenerate_updates_existing(self):
         from apps.core.insight import generate_insight_for_user
         today = date.today()
@@ -87,8 +89,10 @@ class GenerateInsightTests(TestCase):
             user=self.user, week_start=week_start, content='Eski içgörü'
         )
 
-        with patch('google.genai.Client') as mock_cls:
-            mock_cls.return_value.models.generate_content.return_value = MagicMock(text='Yeni içgörü')
+        with patch('groq.Groq') as mock_cls:
+            mock_cls.return_value.chat.completions.create.return_value = MagicMock(
+                choices=[MagicMock(message=MagicMock(content='Yeni içgörü'))]
+            )
             generate_insight_for_user(self.user)
 
         self.assertEqual(WeeklyInsight.objects.filter(user=self.user).count(), 1)

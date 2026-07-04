@@ -112,7 +112,7 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000').split(',')
 CORS_ALLOW_CREDENTIALS = True
 
-GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
+GROQ_API_KEY = config('GROQ_API_KEY', default='')
 
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 APSCHEDULER_RUN_NOW_TIMEOUT = 25

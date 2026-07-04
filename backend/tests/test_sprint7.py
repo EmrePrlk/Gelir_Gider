@@ -87,13 +87,13 @@ class StreakCalculationTests(TestCase):
 
 class ClaudeApiFallbackTests(TestCase):
 
-    @override_settings(GEMINI_API_KEY='')
+    @override_settings(GROQ_API_KEY='')
     def test_call_anthropic_returns_empty_when_no_key(self):
         from apps.core.ai import call_anthropic
         result = call_anthropic("system prompt", "user text")
         self.assertEqual(result, '')
 
-    @override_settings(GEMINI_API_KEY='')
+    @override_settings(GROQ_API_KEY='')
     def test_finance_import_falls_back_to_csv_parse(self):
         from apps.finance.views import _call_anthropic
 
@@ -107,23 +107,25 @@ class ClaudeApiFallbackTests(TestCase):
             self.assertIn('amount', row)
             self.assertIn('type', row)
 
-    @override_settings(GEMINI_API_KEY='test-key-123')
+    @override_settings(GROQ_API_KEY='test-key-123')
     def test_call_anthropic_uses_key_and_handles_api_error(self):
         """API error should not raise — returns empty string."""
         from apps.core.ai import call_anthropic
 
-        with patch('google.genai.Client') as mock_cls:
-            mock_cls.return_value.models.generate_content.side_effect = Exception("connection refused")
+        with patch('groq.Groq') as mock_cls:
+            mock_cls.return_value.chat.completions.create.side_effect = Exception("connection refused")
             result = call_anthropic("system prompt", "user text")
 
         self.assertEqual(result, '')
 
-    @override_settings(GEMINI_API_KEY='test-key-123')
+    @override_settings(GROQ_API_KEY='test-key-123')
     def test_call_anthropic_returns_response_text(self):
         from apps.core.ai import call_anthropic
 
-        with patch('google.genai.Client') as mock_cls:
-            mock_cls.return_value.models.generate_content.return_value = MagicMock(text='  hello world  ')
+        with patch('groq.Groq') as mock_cls:
+            mock_cls.return_value.chat.completions.create.return_value = MagicMock(
+                choices=[MagicMock(message=MagicMock(content='  hello world  '))]
+            )
             result = call_anthropic("system prompt", "user text")
 
         self.assertEqual(result, 'hello world')
