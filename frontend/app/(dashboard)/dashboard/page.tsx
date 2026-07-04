@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import PageWrapper from '@/components/layout/PageWrapper'
 import { Skeleton } from '@/components/ui/Skeleton'
+import WeeklyInsightCard from '@/components/modules/WeeklyInsightCard'
 import { dashboardApi } from '@/lib/api/dashboard'
 import { financeApi } from '@/lib/api/finance'
 import { habitsApi } from '@/lib/api/habits'
@@ -198,7 +199,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Row 3 — Lists */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         {/* Today's tasks */}
         <div
           className="rounded-card border p-5"
@@ -330,6 +331,9 @@ export default function DashboardPage() {
           )}
         </div>
       </div>
+
+      {/* Row 4 — AI Weekly Insight */}
+      <WeeklyInsightCard />
     </PageWrapper>
   )
 }
