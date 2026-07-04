@@ -69,8 +69,10 @@ def send_push_to_user(user):
             vapid_claims={'sub': f'mailto:{settings.VAPID_CLAIMS_EMAIL}'},
         )
         logger.info('Push gönderildi: %s', user.email)
-    except Exception as e:
+    except WebPushException as e:
         logger.error('Push gönderilemedi (%s): %s', user.email, e)
-        if 'expired' in str(e).lower() or '410' in str(e):
+        if e.response is not None and e.response.status_code == 410:
             sub.delete()
             logger.info('Expired subscription silindi: %s', user.email)
+    except Exception as e:
+        logger.error('Push gönderilemedi (%s): %s', user.email, e)
