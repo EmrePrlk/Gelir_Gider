@@ -251,46 +251,46 @@ class CategoryBreakdownView(APIView):
         date_to = request.query_params.get('date_to', str(today))
         tx_type = request.query_params.get('type', 'expense')
 
-        qs = Transaction.objects.filter(
+        base_qs = Transaction.objects.filter(
             user=request.user,
             type=tx_type,
             date__gte=date_from,
             date__lte=date_to,
-        ).select_related('category')
+        )
 
-        totals: dict = {}
-        grand_total = Decimal('0')
+        grand_total = base_qs.aggregate(s=Sum('amount'))['s'] or Decimal('0')
 
-        for tx in qs:
-            if tx.category:
-                key = tx.category_id
-                if key not in totals:
-                    totals[key] = {
-                        'category_id': tx.category_id,
-                        'category_name': tx.category.name,
-                        'category_color': tx.category.color,
-                        'category_icon': tx.category.icon,
-                        'total': Decimal('0'),
-                    }
-                totals[key]['total'] += tx.amount
-                grand_total += tx.amount
-            else:
-                # Uncategorized bucket
-                if 'uncategorized' not in totals:
-                    totals['uncategorized'] = {
-                        'category_id': None,
-                        'category_name': 'Kategorisiz',
-                        'category_color': '#4A4A62',
-                        'category_icon': 'HelpCircle',
-                        'total': Decimal('0'),
-                    }
-                totals['uncategorized']['total'] += tx.amount
-                grand_total += tx.amount
+        categorized = (
+            base_qs.filter(category__isnull=False)
+            .values('category_id', 'category__name', 'category__color', 'category__icon')
+            .annotate(total=Sum('amount'))
+            .order_by('-total')
+        )
 
         result = []
-        for item in sorted(totals.values(), key=lambda x: x['total'], reverse=True):
-            pct = float(item['total'] / grand_total * 100) if grand_total else 0
-            result.append({**item, 'total': float(item['total']), 'percentage': round(pct, 1)})
+        for row in categorized:
+            pct = float(row['total'] / grand_total * 100) if grand_total else 0
+            result.append({
+                'category_id': row['category_id'],
+                'category_name': row['category__name'],
+                'category_color': row['category__color'],
+                'category_icon': row['category__icon'],
+                'total': float(row['total']),
+                'percentage': round(pct, 1),
+            })
+
+        uncategorized_total = base_qs.filter(category__isnull=True).aggregate(s=Sum('amount'))['s']
+        if uncategorized_total:
+            pct = float(uncategorized_total / grand_total * 100) if grand_total else 0
+            result.append({
+                'category_id': None,
+                'category_name': 'Kategorisiz',
+                'category_color': '#4A4A62',
+                'category_icon': 'HelpCircle',
+                'total': float(uncategorized_total),
+                'percentage': round(pct, 1),
+            })
+            result.sort(key=lambda x: x['total'], reverse=True)
 
         return Response(result)
 
