@@ -117,6 +117,6 @@ GROQ_API_KEY = config('GROQ_API_KEY', default='')
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 APSCHEDULER_RUN_NOW_TIMEOUT = 25
 
-VAPID_PRIVATE_KEY = config('VAPID_PRIVATE_KEY', default='').replace('\\n', '\n')
+VAPID_PRIVATE_KEY = config('VAPID_PRIVATE_KEY', default='').replace('|', '\n')
 VAPID_PUBLIC_KEY = config('VAPID_PUBLIC_KEY', default='')
 VAPID_CLAIMS_EMAIL = config('VAPID_CLAIMS_EMAIL', default='admin@example.com')
